@@ -1,0 +1,18 @@
+# Environments
+.venv/
+external/
+
+# Generated outputs
+results/
+*.egg-info/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Large / binary resources
+*.pdf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
