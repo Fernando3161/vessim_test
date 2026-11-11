@@ -40,6 +40,23 @@ VARIANT_STYLES = {
     "Vessim, optimal schedule replay": {"color": PALETTE[3], "dash": "dot", "width": 2.5},
     "Sampled at step start": {"color": PALETTE[0], "dash": "solid", "width": 2},
     "Time-weighted step mean": {"color": PALETTE[1], "dash": "dash", "width": 2},
+    # E02: dispatch policies
+    "Greedy (Vessim default)": {"color": PALETTE[0], "dash": "dash", "width": 2},
+    "Fixed discharge power": {"color": PALETTE[7], "dash": "dashdot", "width": 2},
+    "Time-of-use windows": {"color": PALETTE[6], "dash": "longdash", "width": 2.5},
+    "Price thresholds": {"color": PALETTE[4], "dash": "solid", "width": 2},
+    "Peak shaving": {"color": PALETTE[2], "dash": "dot", "width": 2.5},
+    "Look-ahead, minimum cost": {"color": PALETTE[3], "dash": "solid", "width": 2.5},
+    "Look-ahead, minimum peak": {"color": "#222222", "dash": "dash", "width": 2},
+    # E02: battery models
+    "SimpleBattery (Vessim)": {"color": PALETTE[0], "dash": "dash", "width": 2},
+    "EfficiencyBattery (edge parameters)": {"color": PALETTE[1], "dash": "solid", "width": 2.5},
+    "ClcBattery (Vessim)": {"color": PALETTE[2], "dash": "dot", "width": 2.5},
+    "Requested schedule": {"color": "#222222", "dash": "solid", "width": 1.5},
+    # E02: step sizes
+    "15 min": {"color": PALETTE[0], "dash": "solid", "width": 2},
+    "5 min": {"color": PALETTE[1], "dash": "dash", "width": 2},
+    "1 min": {"color": PALETTE[2], "dash": "dot", "width": 2},
 }
 _FALLBACK_DASHES = ["solid", "dash", "dot", "dashdot", "longdash", "longdashdot"]
 
@@ -269,6 +286,24 @@ def energy_balance_bars(closure: pd.Series, title: str, height: int = 420) -> go
     return fig
 
 
+def tradeoff_scatter(df: pd.DataFrame, x: str, y: str, title: str, height: int = 520,
+                     x_title: Optional[str] = None, y_title: Optional[str] = None) -> go.Figure:
+    """One labelled marker per variant (index) in an x–y trade-off plane."""
+    symbols = ["circle", "square", "diamond", "triangle-up", "triangle-down", "x", "star",
+               "hexagon"]
+    fig = go.Figure()
+    for i, (name, row) in enumerate(df.iterrows()):
+        st = variant_style(name, i)
+        fig.add_trace(go.Scatter(
+            x=[row[x]], y=[row[y]], mode="markers", name=name,
+            marker=dict(color=st["color"], symbol=symbols[i % len(symbols)], size=13,
+                        line=dict(color="#222222", width=1)),
+        ))
+    fig.update_layout(title=title, height=height, hovermode="closest",
+                      xaxis_title=x_title or x, yaxis_title=y_title or y)
+    return fig
+
+
 def save(fig: go.Figure, path, png: bool = False) -> None:
     """Save interactive HTML (and optionally a static PNG via kaleido)."""
     from pathlib import Path
@@ -287,5 +322,5 @@ def format_table(df: pd.DataFrame, digits: int = 2):
 
 __all__: Iterable[str] = [
     "PALETTE", "COMPONENT_COLORS", "VARIANT_STYLES", "variant_style", "line_comparison",
-    "stacked_panels", "grouped_bars", "parity_plot", "save", "format_table",
+    "stacked_panels", "grouped_bars", "parity_plot", "tradeoff_scatter", "save", "format_table",
 ]

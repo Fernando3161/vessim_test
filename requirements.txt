@@ -4,6 +4,7 @@ mosaik==3.7.1
 mosaik-api-v3==3.0.16
 numpy==2.5.4
 pandas==3.1.1
+scipy==1.18.1          # look-ahead LP (E02)
 
 # Plotting
 plotly==7.1.0
