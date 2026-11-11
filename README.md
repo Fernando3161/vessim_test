@@ -23,7 +23,7 @@ See [docs/REPO_OBJECTIVES.md](docs/REPO_OBJECTIVES.md) for goals and hypotheses,
 | E00 | Setup and smoke test | done — [report](docs/reports/E00_setup_smoke.md) |
 | E01 | Energy-side equivalence with the edge study | done — [report](docs/reports/E01_energy_equivalence.md) |
 | E02 | Dispatch policies and storage models | done — [report](docs/reports/E02_dispatch_and_storage.md) |
-| E03 | Dynamic workload | planned |
+| E03 | Dynamic workload | done — [report](docs/reports/E03_dynamic_workload.md) |
 | E04 | Thermal and cooling | planned |
 | E05 | Grid-serving flexibility | planned |
 | E06 | Metrics, recording and viewer | planned |

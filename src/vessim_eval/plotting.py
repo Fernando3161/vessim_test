@@ -53,6 +53,12 @@ VARIANT_STYLES = {
     "EfficiencyBattery (edge parameters)": {"color": PALETTE[1], "dash": "solid", "width": 2.5},
     "ClcBattery (Vessim)": {"color": PALETTE[2], "dash": "dot", "width": 2.5},
     "Requested schedule": {"color": "#222222", "dash": "solid", "width": 1.5},
+    # E03: workload variants
+    "Static IT trace (edge study output)": {"color": "#222222", "dash": "solid", "width": 3},
+    "Jobs, start on arrival": {"color": PALETTE[0], "dash": "dash", "width": 2},
+    "Jobs, cheapest price": {"color": PALETTE[4], "dash": "solid", "width": 2},
+    "Jobs, lowest peak": {"color": PALETTE[2], "dash": "dot", "width": 2.5},
+    "Jobs, hold on high import": {"color": PALETTE[3], "dash": "dashdot", "width": 2},
     # E02: step sizes
     "15 min": {"color": PALETTE[0], "dash": "solid", "width": 2},
     "5 min": {"color": PALETTE[1], "dash": "dash", "width": 2},
@@ -317,7 +323,7 @@ def save(fig: go.Figure, path, png: bool = False) -> None:
 
 def format_table(df: pd.DataFrame, digits: int = 2):
     """Pandas Styler with thousands separators and fixed decimals for notebooks."""
-    return df.style.format(precision=digits, thousands=",")
+    return df.style.format(precision=digits, thousands=",", na_rep="—")
 
 
 __all__: Iterable[str] = [
