@@ -25,7 +25,7 @@ See [docs/REPO_OBJECTIVES.md](docs/REPO_OBJECTIVES.md) for goals and hypotheses,
 | E02 | Dispatch policies and storage models | done — [report](docs/reports/E02_dispatch_and_storage.md) |
 | E03 | Dynamic workload | done — [report](docs/reports/E03_dynamic_workload.md) |
 | E04 | Thermal and cooling | done — [report](docs/reports/E04_thermal_cooling.md) |
-| E05 | Grid-serving flexibility | planned |
+| E05 | Grid-serving flexibility | done — [report](docs/reports/E05_grid_flexibility.md) |
 | E06 | Metrics, recording and viewer | planned |
 | E07 | Mosaik coupling with an edge study simulator | planned |
 | E08 | Multi-site federation | planned |

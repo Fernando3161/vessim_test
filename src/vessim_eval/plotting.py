@@ -67,6 +67,18 @@ VARIANT_STYLES = {
     "No event": {"color": "#222222", "dash": "solid", "width": 2},
     "Vessim heat-recovery actor": {"color": PALETTE[3], "dash": "dash", "width": 2.5},
     "District-heating demand": {"color": PALETTE[7], "dash": "dot", "width": 2},
+    # E05: grid limits, demand response, islanding
+    "Import limit": {"color": "#888888", "dash": "dot", "width": 1.5},
+    "Net site demand": {"color": "#222222", "dash": "solid", "width": 1.5},
+    "Built-in policy, battery first": {"color": PALETTE[0], "dash": "dash", "width": 2},
+    "Built-in policy, grid first": {"color": PALETTE[1], "dash": "longdash", "width": 2},
+    "Battery only": {"color": PALETTE[4], "dash": "dash", "width": 2},
+    "Flexible load only": {"color": PALETTE[2], "dash": "dot", "width": 2.5},
+    "Battery + flexible load": {"color": PALETTE[3], "dash": "solid", "width": 2.5},
+    "Battery + flexible load, not announced": {"color": PALETTE[7], "dash": "dashdot", "width": 2},
+    "Battery + flexible load, capped recovery": {"color": PALETTE[9], "dash": "longdash", "width": 2},
+    "Island, no reconnection ramp": {"color": PALETTE[3], "dash": "solid", "width": 2.5},
+    "Island, reconnection ramp 1 000 kW per step": {"color": PALETTE[0], "dash": "dash", "width": 2},
     # E02: step sizes
     "15 min": {"color": PALETTE[0], "dash": "solid", "width": 2},
     "5 min": {"color": PALETTE[1], "dash": "dash", "width": 2},
@@ -161,6 +173,49 @@ def stacked_panels(
     fig.update_xaxes(title_text=x_title, row=len(panels), col=1)
     _frame_all_axes(fig)
     fig.update_layout(title=title, height=row_height * len(panels) + 140)
+    return fig
+
+
+def band_panels(
+    panels: list[tuple[str, pd.Series, Mapping[str, tuple[pd.Series, pd.Series]]]],
+    title: str,
+    y_title: str,
+    x_title: str = "Time of day",
+    row_height: int = 260,
+) -> go.Figure:
+    """Stacked panels of shaded bands around a reference line.
+
+    ``panels`` is a list of (panel label, reference series, {band name: (lower, upper)}).
+    Bands are drawn widest first with the sequential "mako" palette, so narrower bands sit on
+    top; the same band name keeps its colour in every panel. Step-shaped (``hv``) lines.
+    """
+    names: list[str] = []
+    for _, _, bands in panels:
+        names += [n for n in bands if n not in names]
+    colors = sns.color_palette("mako", len(names) + 1).as_hex()[1:][::-1]
+    fig = make_subplots(rows=len(panels), cols=1, shared_xaxes=True, vertical_spacing=0.08,
+                        subplot_titles=[p[0] for p in panels])
+    seen: set[str] = set()
+    for row, (_, ref, bands) in enumerate(panels, start=1):
+        for name, (lo, hi) in bands.items():
+            c = colors[names.index(name)]
+            fig.add_trace(go.Scatter(x=hi.index, y=hi.values, mode="lines", line_shape="hv",
+                                     line=dict(color=c, width=0.8), legendgroup=name,
+                                     showlegend=False, hoverinfo="skip"), row=row, col=1)
+            fig.add_trace(go.Scatter(x=lo.index, y=lo.values, mode="lines", line_shape="hv",
+                                     line=dict(color=c, width=0.8), fill="tonexty",
+                                     fillcolor=c + "66", name=name, legendgroup=name,
+                                     showlegend=name not in seen), row=row, col=1)
+            seen.add(name)
+        fig.add_trace(go.Scatter(x=ref.index, y=ref.values, mode="lines", line_shape="hv",
+                                 name="Reference grid import", legendgroup="ref",
+                                 showlegend=row == 1, line=dict(color="#222222", width=2)),
+                      row=row, col=1)
+        fig.update_yaxes(title_text=_wrap(y_title), row=row, col=1)
+    fig.update_xaxes(title_text=x_title, row=len(panels), col=1)
+    _frame_all_axes(fig)
+    fig.update_annotations(font=dict(size=13), x=0, xanchor="left")
+    fig.update_layout(title=title, height=row_height * len(panels) + 160)
     return fig
 
 
