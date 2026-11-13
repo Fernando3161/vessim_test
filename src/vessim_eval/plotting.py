@@ -59,6 +59,14 @@ VARIANT_STYLES = {
     "Jobs, cheapest price": {"color": PALETTE[4], "dash": "solid", "width": 2},
     "Jobs, lowest peak": {"color": PALETTE[2], "dash": "dot", "width": 2.5},
     "Jobs, hold on high import": {"color": PALETTE[3], "dash": "dashdot", "width": 2},
+    # E04: cooling models and heat recovery
+    "Constant overhead (0.285 × IT)": {"color": PALETTE[0], "dash": "dash", "width": 2},
+    "Linear fit to edge run": {"color": PALETTE[4], "dash": "dashdot", "width": 2},
+    "Ported edge cooling chain": {"color": PALETTE[2], "dash": "dot", "width": 3},
+    "IT power": {"color": PALETTE[7], "dash": "solid", "width": 2},
+    "No event": {"color": "#222222", "dash": "solid", "width": 2},
+    "Vessim heat-recovery actor": {"color": PALETTE[3], "dash": "dash", "width": 2.5},
+    "District-heating demand": {"color": PALETTE[7], "dash": "dot", "width": 2},
     # E02: step sizes
     "15 min": {"color": PALETTE[0], "dash": "solid", "width": 2},
     "5 min": {"color": PALETTE[1], "dash": "dash", "width": 2},
